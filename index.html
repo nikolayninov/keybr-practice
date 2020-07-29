@@ -23,22 +23,34 @@
 <body>
     <div class="container">
         <div class="row col-12">
-            <div class="col-3"></div>
+            <div class="col-3">
+            </div>
             <div class="col-6">
                 <h1>
                     Keys go brr [Practice]
                 </h1>
                 <div class="input-group mb-3">
-                    <input type="number" class="form-control input-sm" id="spc" placeholder="Seconds" aria-label="spc" aria-describedby="basic-addon1">
+                    <!-- <input type="number" class="form-control input-sm" id="spc" placeholder="Seconds" aria-label="spc" aria-describedby="basic-addon1"> -->
                     <input type="number" class="form-control input-sm" id="total-chars" placeholder="Total characters" aria-label="total-chars" aria-describedby="basic-addon1">
                     <input class="btn btn-primary" type="button" value="Brrr!" id="init-button">
                 </div>
-                <div class="container">
-                    <h2 id="typing-field">
-                        <span id="current"></span>
-                        <span id="next"></span>
-                    </h2>
-                </div>
+            </div>
+            <div class="col-3">
+                <h3>
+                    <span style="color:#808080">WPM: </span><span id="stats">0</span>
+                </h3>
+                <h3>
+                    <span style="color:#808080">Accuracy: </span> <span id="accuracy">0</span>%
+                </h3>
+            </div>
+        </div>
+        <div class="row col-12">
+            <div class="col-3"></div>
+            <div class="col-6">
+                <h2 id="typing-field">
+                    <span id="current"></span>
+                    <span id="next"></span>
+                </h2>
             </div>
             <div class="col-3"></div>
 

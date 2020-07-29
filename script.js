@@ -1,12 +1,11 @@
-function wpm_to_cpm(wpm) {
-    return wpm * 5;
-}
 const alpha = "abcdefghijklmnopqrstuvwxyz";
-const len = alpha.length;
+const len = alpha.length - 1;
 $(document).ready(function () {
     let spc = $("#spc");
     let total = $("#total-chars");
     let btn = $("#init-button");
+    let stats = $("#stats");
+    let accuracy = $("#accuracy");
 
     function clear() {
         spc.val("");
@@ -30,8 +29,26 @@ $(document).ready(function () {
         let wrong_audio = new Audio("wrong.mp3");
         wrong_audio.play();
     }
+    function finished_sound() {
+        let finished_audio = new Audio("finished.mp3");
+        finished_audio.play();
+    }
     function random_letter() {
         return alpha[Math.round(Math.random() * len)];
+    }
+    function wpm_to_cpm(wpm) {
+        return wpm * 5;
+    }
+    function cpm_to_wpm(cpm) {
+        return cpm / 5;
+    }
+    function ms_to_min(ms) {
+        return ms / 60000;
+    }
+    function print_stats(diff, total, correct) {
+        let wpm = (cpm_to_wpm(total) / ms_to_min(diff)).toFixed(1);
+        stats.text(wpm);
+        accuracy.text(Math.round(correct / (total) * 100));
     }
     function practice() {
         let total_val = Number(total.val()) - 1;
@@ -39,39 +56,49 @@ $(document).ready(function () {
         let next = $("#next");
         let chars = [];
         let cnt = 0;
+        let start, end;
+        let correct = 0;
         clear();
 
         for (let i = 0; i <= total_val; i++) {
             chars.push(random_letter());
         }
-        console.log(chars);
         let current_letter = chars[cnt];
-        let next_letters = chars.slice(cnt + 1, Math.min(cnt + 5, total_val)).join("   ");
+        let next_letters = chars.slice(cnt + 1, Math.min(cnt + 7, total_val + 1)).join("   ");
         current.text(current_letter);
         next.text(next_letters);
 
         $(document).keypress(function (e) {
             let letter = String.fromCharCode(e.charCode);
             if (letter == current_letter) {
-                if (cnt == total_val) {
+                if (cnt == 0) {
+                    start = Date.now();
+                }
+                else if (cnt == total_val) {
+                    end = Date.now();
+                    finished_sound();
+                    print_stats(end - start, total_val, correct);
                     current.text("");
                     next.text("");
-                    alert("BRRR");
+                    chars = [];
+                    cnt = 0;
+                    $(document).unbind("keypress");
                 }
 
                 click_sound();
+                correct++;
                 cnt++;
                 current_letter = chars[cnt];
-                next_letters = chars.slice(cnt + 1, cnt + 5).join("    ");
+                next_letters = chars.slice(cnt + 1, Math.min(cnt + 5, total_val + 1)).join("   ");
                 current.text(current_letter);
                 next.text(next_letters);
             }
             else {
+                correct--;
                 wrong_sound();
             }
         });
     }
-
     btn.click(practice);
 });
 
